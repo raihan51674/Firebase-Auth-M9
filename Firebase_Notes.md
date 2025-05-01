@@ -163,8 +163,8 @@ const Login = () => {
   }
 
   const handelForgetPassword=()=>{
-    console.log(EmailRef.current.value);
-    const email =EmailRef.current.value;
+    console.log(EmailRef.current?.value);
+    const email =EmailRef.current?.value;
     setErrorMessage("")
   sendPasswordResetEmail(auth, email)
   .then(() => {
