@@ -9,48 +9,48 @@
 //  6.user information exces (res.user) and display
 //  7.add signOut and pass auth using condition for button
 
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import {  GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import React, { useState } from 'react';
-import { auth } from '../../../Firebase/Firebase.init';
+import { auth } from './Firebase/Firebase';
 
-const Login = () => {
-  const [userdata, setUserdata]=useState(null)
+const SignUp = () => {
+  const [userData, setUserData]=useState(null)
   const provider = new GoogleAuthProvider();
-  const handleClick=()=>{
-    console.log("helo");
-    signInWithPopup(auth,provider).then(res=>{
-      console.log(res.user);
-      setUserdata(res.user)
-    }).catch(error=>{
-      console.log(error); 
-    }) 
+  const GithubProvider = new GoogleAuthProvider();
+  const handleSingUp=()=>{
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    setUserData(result.user)
+  }).catch((error) => {
+    console.log(error);
+  });
   }
-
-  const handleOut=()=>{
-    signOut(auth).then(()=>{
-      console.log("sign out compeled");
-      setUserdata(null)
-    }).catch(error=>{
+  const handleGithub=()=>{
+    signInWithPopup(auth, GithubProvider)
+  .then((result) => {
+    setUserData(result.user)
+  }).catch((error) => {
+    console.log(error);
+  });
+  }
+  const handleSingOut=()=>{
+    signOut(auth).then(() => {
+      setUserData(null)
+    }).catch((error) => {
       console.log(error);
-    })
+    }); 
   }
   return (
     <div>
-      <h1>please login</h1>
       {
-        userdata ? <button onClick={handleOut}>sign out</button> : <button onClick={handleClick}>Sign in google</button>
+        userData ? <button onClick={handleSingOut}>Sing Out with Google</button> :    <div>
+          <button onClick={handleSingUp}>Sing up with Google</button>
+          <button onClick={handleGithub}>Sign in with Github</button>
+        </div>
       }
-       {/* show data */}
-        {
-          userdata && <div>
-            <h1>{userdata?.displayName}</h1>
-             <h3>{userdata?.email}</h3>
-             <img src={userdata.photoURL} alt="" />
-          </div>
-        }
+      <h1>{userData && <p>{userData.email}</p>}</h1>
     </div>
   );
 };
-
-export default Login;
+export default SignUp;
 ```
