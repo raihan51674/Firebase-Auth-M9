@@ -202,7 +202,7 @@ export const AuthContext =createContext(null)
 
 //2.AuthProvider.jsx
 const AuthProvider = ({children}) => {
-//all task working
+//firebase auth function create
   const userInfo={
     email :"mum@gmail.com"
   }
