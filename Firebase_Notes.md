@@ -193,6 +193,35 @@ const Login = () => {
 };
 
 ```
+### Context Api (data coummnication any where) working 4 step
+#### 1.create AuthContex.jsx and 2.AuthProvider 3.add main.jsx and 4.any comoponent exces
+```js
+//1.step AuthContext.jsx
+import { createContext } from "react";
+export const AuthContext =createContext(null)
+
+//2.AuthProvider.jsx
+const AuthProvider = ({children}) => {
+  const userInfo={
+    email :"mum@gmail.com"
+  }
+  return (
+    <AuthContext value={userInfo}>
+       {children}
+    </AuthContext>
+  );
+};
+
+//3.main.jsx
+ <AuthProvider>
+     <RouterProvider router={router} />
+ </AuthProvider>
+
+//4.use navbar
+ const userInfo=use(AuthContext)
+  console.log(userInfo);
+  
+```
 
 
 
