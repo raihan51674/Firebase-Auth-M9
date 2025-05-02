@@ -196,19 +196,45 @@ const Login = () => {
 ### Context Api (data coummnication any where) working 4 step
 #### 1.create AuthContex.jsx and 2.AuthProvider 3.add main.jsx and 4.any comoponent exces
 ```js
+//module:
+//1.crate sigin and sigup page and value recive
+//2.context api create(4) and create function authProvider: createUserWithEmailAndPassword(),signInWithEmailAndPassword(),signOut() and useEffect inside onAuthStateChanged() and and use useState receve useData
+//3.sigin and signup page througth data destructure and function call with props down .then() and catch()
+//4.data take navbar and create ternary button and handllesignOut
+
+
+
 //1.step AuthContext.jsx
 import { createContext } from "react";
 export const AuthContext =createContext(null)
 
 //2.AuthProvider.jsx
-
- const AuthProvider = ({children}) => {
- const createUser=({email,password})=>{
-  createUserWithEmailAndPassword(auth,email,password)
+const AuthProvider = ({children}) => {
+  const [UserData,setUserData]=useState(null)
+ const createUser=(email,password)=>{
+  return createUserWithEmailAndPassword(auth,email,password)
  }
-//more add
+ const SignInUser=(email,password)=>{
+  return signInWithEmailAndPassword(auth, email, password);
+ }
+ const SignOutUser=()=>{
+  return signOut(auth)
+ }
+ useEffect(()=>{
+  const UnSubscribe = onAuthStateChanged(auth, currentUser=> {
+    console.log("inside useEffect on auth state change",currentUser);
+    setUserData(currentUser)
+  })
+  return ()=>{
+    UnSubscribe()
+  }
+ },[])
    const UserInfo={
-    createUser
+    UserData,
+    SignOutUser,
+    createUser,
+    SignInUser
+    
    }
   return (
     <AuthContext value={UserInfo}>
@@ -217,14 +243,48 @@ export const AuthContext =createContext(null)
   );
 };
 
+
 //3.main.jsx
  <AuthProvider>
      <RouterProvider router={router} />
  </AuthProvider>
 
-//4.use navbar
- const userInfo=use(AuthContext)
-  console.log(userInfo);
+//4.use sign up and similar sign IN page
+ const {createUser} =use(AuthContext)
+  console.log(createUser);
+
+ const handleSubmit=e=>{
+    e.preventDefault()
+    const name=e.target.name.value
+    const email=e.target.email.value;
+    const password=e.target.password.value;
+
+    //context api to data
+   createUser(email, password)
+   .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+  console.log(error);
+  });
+//use Nabvar button
+const Navbar = () => {
+   const { UserData,SignOutUser }=use(AuthContext)
+   console.log(UserData);
+
+   const handleSignOut=()=>{
+    SignOutUser().then(()=>{
+      console.log("sign out successfully");
+      
+    }).catch((error)=>{
+      console.log(error);
+
+    })
+   }
+{
+      UserData ? <a onClick={handleSignOut} className="btn">Sign Out</a> : <Link to="/signin">Login</Link>
+    }
+}
   
 ```
 
