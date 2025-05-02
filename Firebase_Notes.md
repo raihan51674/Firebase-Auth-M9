@@ -287,6 +287,35 @@ const Navbar = () => {
 }
   
 ```
+### Private Route :
+```js
+//1.UserData use ternary operetor NavLink and component create
+//2.Private Rotue create
+//3. add main Route file Private Route
+ <NavLink to="/signin">Sign In</NavLink>
+   <NavLink to="/signup">Sign Up</NavLink>
+   {
+    UserData && <>
+    <NavLink to="/orders">Orders</NavLink>
+    <NavLink to="/profile">Profile</NavLink>
+    </>
+   }
+
+//2.private route
+const PrivateRoute = ({children}) => {
+  const {UserData}=use(AuthContext)
+  if(!UserData){
+    return <Navigate to="/signin">Login</Navigate>
+  }
+  return children
+};
+
+//3. add main route
+{path:"/orders", element:<PrivateRoute><Orders></Orders></PrivateRoute>},
+
+
+
+```
 
 
 
