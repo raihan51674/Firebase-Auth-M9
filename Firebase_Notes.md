@@ -201,14 +201,18 @@ import { createContext } from "react";
 export const AuthContext =createContext(null)
 
 //2.AuthProvider.jsx
-const AuthProvider = ({children}) => {
-//firebase auth function create
-  const userInfo={
-    email :"mum@gmail.com"
-  }
+
+ const AuthProvider = ({children}) => {
+ const createUser=({email,password})=>{
+  createUserWithEmailAndPassword(auth,email,password)
+ }
+//more add
+   const UserInfo={
+    createUser
+   }
   return (
-    <AuthContext value={userInfo}>
-       {children}
+    <AuthContext value={UserInfo}>
+     {children}
     </AuthContext>
   );
 };
