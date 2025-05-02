@@ -198,7 +198,8 @@ const Login = () => {
 ```js
 //module:
 //1.crate sigin and sigup page and value recive
-//2.context api create(4) and create function authProvider: createUserWithEmailAndPassword(),signInWithEmailAndPassword(),signOut() and useEffect inside onAuthStateChanged() and and use useState receve useData
+//2.context api create(4) and create function authProvider: createUserWithEmailAndPassword(),
+//signInWithEmailAndPassword(),signOut() and useEffect inside onAuthStateChanged() and and use useState receve useData
 //3.sigin and signup page througth data destructure and function call with props down .then() and catch()
 //4.data take navbar and create ternary button and handllesignOut
 
@@ -211,30 +212,36 @@ export const AuthContext =createContext(null)
 //2.AuthProvider.jsx
 const AuthProvider = ({children}) => {
   const [UserData,setUserData]=useState(null)
+  //show order and profile data
+  const [Loading, setLoading]=useState(true)
  const createUser=(email,password)=>{
+  setLoading(true)
   return createUserWithEmailAndPassword(auth,email,password)
  }
  const SignInUser=(email,password)=>{
+  setLoading(true)
   return signInWithEmailAndPassword(auth, email, password);
  }
  const SignOutUser=()=>{
+  setLoading(true)
   return signOut(auth)
  }
  useEffect(()=>{
   const UnSubscribe = onAuthStateChanged(auth, currentUser=> {
     console.log("inside useEffect on auth state change",currentUser);
     setUserData(currentUser)
+    setLoading(false)
   })
   return ()=>{
     UnSubscribe()
   }
  },[])
    const UserInfo={
+    Loading,
     UserData,
     SignOutUser,
     createUser,
     SignInUser
-    
    }
   return (
     <AuthContext value={UserInfo}>
@@ -292,6 +299,12 @@ const Navbar = () => {
 //1.UserData use ternary operetor NavLink and component create
 //2.Private Rotue create
 //3. add main Route file Private Route
+//4. loading add authProvider and PrivateRoute
+//5.User click login go to home page
+//6. Disable:(login korar age jekhane jete chai login korar por thik oikhane jabo)
+// new component create public Navlink and private Router and componenet privateRoute add useLocation
+//7.login page add location and call add (navigate(location?.state || "/"))
+//8.social google item add tailwin google button add sigin in and sign uo page from ar niche
  <NavLink to="/signin">Sign In</NavLink>
    <NavLink to="/signup">Sign Up</NavLink>
    {
@@ -303,7 +316,11 @@ const Navbar = () => {
 
 //2.private route
 const PrivateRoute = ({children}) => {
-  const {UserData}=use(AuthContext)
+  const {UserData,Loading}=use(AuthContext)
+  //UserData check na kortei data diye dibe
+  if(Loading){
+    return <span className="loading loading-spinner text-info"></span>
+  }
   if(!UserData){
     return <Navigate to="/signin">Login</Navigate>
   }
@@ -312,6 +329,39 @@ const PrivateRoute = ({children}) => {
 
 //3. add main route
 {path:"/orders", element:<PrivateRoute><Orders></Orders></PrivateRoute>},
+
+//4 add loading
+ const {UserData,Loading}=use(AuthContext)
+  if(Loading){
+    return <span className="loading loading-spinner text-info"></span>
+  }
+
+//5.Login page add
+const navigate=useNavigate()
+and down add and call
+  SignInUser(email,password)
+  .then((result) => {
+  navigate("/")
+  })
+
+//6. add location
+const PrivateRoute = ({children}) => {
+  const {UserData,Loading}=use(AuthContext)
+  //add location
+  const location =useLocation()
+  console.log(location);
+  
+  if(Loading){
+    return <span className="loading loading-spinner text-info"></span>
+  }
+  if(!UserData){
+    //add location
+    return <Navigate state={location?.pathname} to="/signin">Login</Navigate>
+  }
+  return children
+};
+
+
 
 
 
