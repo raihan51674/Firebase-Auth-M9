@@ -178,9 +178,9 @@ const Login = () => {
         <div>
           <form onSubmit={handleLogin} className='flex flex-col'>
             <label>Email</label>
-          <input type="email" name='email'  placeholder="Email" />
+          <input type="email" name='email' ref={EmailRef}   placeholder="Email" />
           <label >Password</label>
-          <input type="password" name='password' ref={EmailRef} placeholder="Pass" />
+          <input type="password" name='password' placeholder="Pass" />
           <div onClick={handelForgetPassword}><a className='link link-hover'>Forgot password?</a></div>
           <button >Login</button>
         </form>
