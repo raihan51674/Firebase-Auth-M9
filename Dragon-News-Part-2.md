@@ -11,6 +11,10 @@
 
 
 ```js
+//1.must use
+@plugin "daisyui"{
+themes : light --default;
+}
 //2.
 const HomeLayout = () => {
   return (
