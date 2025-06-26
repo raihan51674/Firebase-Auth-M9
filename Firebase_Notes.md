@@ -360,7 +360,11 @@ const PrivateRoute = ({children}) => {
   }
   return children
 };
-
+//use
+ const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state || "/"
+navigate( navigate(from, { replace: true }))
 
 
 
